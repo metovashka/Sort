@@ -5,13 +5,12 @@ using namespace std;
 
 class Sort {
 public:
-    virtual void sort(int *array, int left, int right) = 0;
+    virtual void sort(int *array, int size) = 0;
 };
 
 class MergeSort : public Sort {
-public:
-    void sort(int *array, int left, int right) {
-
+private:
+    void _sort(int *array, int left, int right) {
         if (right == left)
             return;
 
@@ -23,8 +22,8 @@ public:
         }
 
         int middle = (right + left) / 2;
-        sort(array, left, middle);
-        sort(array, middle + 1, right);
+        _sort(array, left, middle);
+        _sort(array, middle + 1, right);
 
         int *buf = nullptr;
         buf = new int[right+1];
@@ -50,6 +49,11 @@ public:
             array[i + left] = buf[i];
         }
         delete buf;
+    }
+
+public:
+    void sort(int *array, int size) {
+        _sort(array, 0, size-1);
     };
 };
 
@@ -57,7 +61,7 @@ void printSortedArray(Sort &sort, int *arr, int n) {
     int *res = new int[n];
     memcpy(res, arr, n * sizeof(int));
 
-    sort.sort(res, 0, n - 1);
+    sort.sort(res,n);
 
     for (int i = 0; i < n; i++) {
         std::cout << " " << res[i];
